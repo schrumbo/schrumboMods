@@ -30,7 +30,8 @@
 		"fabricloader": ">=0.17.3",
 		"minecraft": "~1.21.5",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"schrumboconfig": "*"
 	},
 	"suggests": {
 		"another-mod": "*"
