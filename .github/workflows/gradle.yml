@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'gradle'
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Build schrumboconfig
+      run: ./gradlew :schrumboconfig:build
+    
+    - name: Build schrumbohud
+      run: ./gradlew :schrumbohud:build
+    
+    - name: Upload schrumboconfig artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: schrumboconfig
+        path: schrumboconfig/build/libs/*.jar
+    
+    - name: Upload schrumbohud artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: schrumbohud
+        path: schrumbohud/build/libs/*.jar
+    
+    # Create Release when tag is pushed
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          schrumboconfig/build/libs/*.jar
+          schrumbohud/build/libs/*.jar
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
