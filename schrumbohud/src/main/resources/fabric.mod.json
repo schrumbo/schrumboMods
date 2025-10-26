@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "schrumbohud",
+	"version": "${version}",
+	"name": "schrumboHUD",
+	"description": "Clean Inventory HUD!",
+	"authors": [
+		"schrumbo"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/schrumbohud/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"schrumbo.schrumbohud.SchrumboHUDClient"
+		]
+	},
+	"mixins": [
+		"schrumbohud.mixins.json",
+		{
+			"config": "schrumbohud.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.5",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

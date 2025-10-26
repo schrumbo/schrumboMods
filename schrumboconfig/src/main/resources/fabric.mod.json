@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "schrumboconfig",
+	"version": "${version}",
+	"name": "schrumboConfig",
+	"description": "highly customizable ClickGUI Framework",
+	"authors": [
+		"schrumbo"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/schrumboconfig/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"schrumbo.schrumboconfig.SchrumboConfig"
+		],
+		"client": [
+			"schrumbo.schrumboconfig.SchrumboConfigClient"
+		]
+	},
+	"mixins": [
+		"schrumboconfig.mixins.json",
+		{
+			"config": "schrumboconfig.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.5",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
