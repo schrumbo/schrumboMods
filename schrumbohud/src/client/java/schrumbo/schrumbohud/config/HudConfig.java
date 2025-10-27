@@ -1,67 +1,87 @@
 package schrumbo.schrumbohud.config;
 
+import com.google.gson.annotations.SerializedName;
+
 public class HudConfig {
 
-    // Inventory HUD
+
     public boolean enabled = true;
-    public int x = 10;
-    public int y = 10;
+
+    @SerializedName("anchor")
+    public Anchor anchor = new Anchor();
+
+    @SerializedName("position")
+    public Position position = new Position();
+
+    @SerializedName("colors")
+    public Colors colors = new Colors();
+
+
+    public static class Anchor {
+        @SerializedName("horizontal")
+        public HorizontalAnchor horizontal = HorizontalAnchor.LEFT;
+
+        @SerializedName("vertical")
+        public VerticalAnchor vertical = VerticalAnchor.TOP;
+    }
+
+    public enum HorizontalAnchor {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+    public enum VerticalAnchor {
+        TOP,
+        CENTER,
+        BOTTOM
+    }
+
+    public static class Position{
+        public int x = 10;
+        public int y = 10;
+    }
+
+    public static class Colors {
+        @SerializedName("background")
+        public int background = 0x1E1E2E;
+
+        @SerializedName("border")
+        public int border = 0x45475A;
+
+        @SerializedName("text")
+        public int text = 0xCDD6F4;
+
+        @SerializedName("accent")
+        public int accent = 0xCBA6F7;
+    }
+
     public float scale = 1.0f;
-
-    // Background
-    public boolean backgroundEnabled = true;
-    public float backgroundOpacity = 1.0f;
-    public int backgroundColor = 0xFF1E1E2E; // Mocha Base
-
-    // Outline
-    public boolean outlineEnabled = true;
-    public float outlineOpacity = 1.0f;
-    public int outlineColor = 0xFF89B4FA; // Mocha Blue
-
-    // Text
-    public boolean textShadowEnabled = true;
-    public float textShadowOpacity = 1.0f;
-    public int textColor = 0xFFCDD6F4; // Mocha Text
-
-    // Corner
     public float cornerRadius = 0.2f;
 
-    // Slot Background
+    public boolean backgroundEnabled = true;
+    public float backgroundOpacity = 1.0f;
+
+    public boolean outlineEnabled = true;
+    public float outlineOpacity = 1.0f;
+
+    public boolean textShadowEnabled = true;
+    public float textShadowOpacity = 1.0f;
+
     public boolean slotBackgroundEnabled = true;
     public float slotBackgroundOpacity = 1.0f;
-    public int slotBackgroundColor = 0xFF313244; // Mocha Surface0
 
     /**
-     * @return Background color with opacity applied (ARGB)
+     * Used to apply opacity to a color
+     * @param color a color wihtout opacity applied
+     * @param opacity wanted opacity
+     * @return color with opacity
      */
-    public int getBackgroundColorWithOpacity() {
-        int alpha = (int) (backgroundOpacity * 255);
-        return (alpha << 24) | (backgroundColor & 0x00FFFFFF);
+    public int getColorWithAlpha(int color, float opacity){
+        int alpha = (int) (opacity * 255);
+        return (alpha << 24) | (color & 0x00FFFFFF);
     }
 
-    /**
-     * @return Outline color with opacity applied (ARGB)
-     */
-    public int getOutlineColorWithOpacity() {
-        int alpha = (int) (outlineOpacity * 255);
-        return (alpha << 24) | (outlineColor & 0x00FFFFFF);
-    }
-
-    /**
-     * @return Slot background color with opacity applied (ARGB)
-     */
-    public int getSlotBackgroundColorWithOpacity() {
-        int alpha = (int) (slotBackgroundOpacity * 255);
-        return (alpha << 24) | (slotBackgroundColor & 0x00FFFFFF);
-    }
-
-    /**
-     * @return Text color with opacity applied (ARGB)
-     */
-    public int getTextColorWithOpacity() {
-        int alpha = (int) (textShadowOpacity * 255);
-        return (alpha << 24) | (textColor & 0x00FFFFFF);
-    }
 
     /**
      * Toggle HUD visibility
@@ -75,26 +95,27 @@ public class HudConfig {
      */
     public void reset() {
         this.enabled = true;
-        this.x = 10;
-        this.y = 10;
+
+        position.x = 10;
+        position.y = 10;
         this.scale = 1.0f;
 
         this.backgroundEnabled = true;
         this.backgroundOpacity = 1.0f;
-        this.backgroundColor = 0xFF1E1E2E;
+        colors.background = 0xFF1E1E2E;
 
         this.outlineEnabled = true;
         this.outlineOpacity = 1.0f;
-        this.outlineColor = 0xFF89B4FA;
+        colors.border = 0xFF89B4FA;
 
         this.textShadowEnabled = true;
         this.textShadowOpacity = 1.0f;
-        this.textColor = 0xFFCDD6F4;
+        colors.text = 0xFFCDD6F4;
 
         this.cornerRadius = 0.2f;
 
         this.slotBackgroundEnabled = true;
         this.slotBackgroundOpacity = 1.0f;
-        this.slotBackgroundColor = 0xFF313244;
+        colors.accent = 0xFF313244;
     }
 }

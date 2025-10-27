@@ -41,7 +41,6 @@ public class ConfigManager {
             config = new HudConfig();
             LOGGER.info("failed to read config, using default");
         }
-
         return config;
     }
 
