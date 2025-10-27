@@ -9,7 +9,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/schrumboconfig" />
             <option value="$PROJECT_DIR$/schrumbohud" />
           </set>
         </option>

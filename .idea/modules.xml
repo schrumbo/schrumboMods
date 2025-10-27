@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/schrumboconfig/schrumbo-mods.schrumboconfig.client.iml" filepath="$PROJECT_DIR$/.idea/modules/schrumboconfig/schrumbo-mods.schrumboconfig.client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/schrumboconfig/schrumbo-mods.schrumboconfig.main.iml" filepath="$PROJECT_DIR$/.idea/modules/schrumboconfig/schrumbo-mods.schrumboconfig.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/schrumboconfig/schrumbo-mods.schrumboconfig.test.iml" filepath="$PROJECT_DIR$/.idea/modules/schrumboconfig/schrumbo-mods.schrumboconfig.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/schrumbohud/schrumbo-mods.schrumbohud.client.iml" filepath="$PROJECT_DIR$/.idea/modules/schrumbohud/schrumbo-mods.schrumbohud.client.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/schrumbohud/schrumbo-mods.schrumbohud.main.iml" filepath="$PROJECT_DIR$/.idea/modules/schrumbohud/schrumbo-mods.schrumbohud.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/schrumbohud/schrumbo-mods.schrumbohud.test.iml" filepath="$PROJECT_DIR$/.idea/modules/schrumbohud/schrumbo-mods.schrumbohud.test.iml" />

@@ -10,5 +10,5 @@ pluginManagement {
 
 rootProject.name = "schrumbo-mods"
 
-include("schrumboconfig")
+//include("schrumboconfig")
 include("schrumbohud")
