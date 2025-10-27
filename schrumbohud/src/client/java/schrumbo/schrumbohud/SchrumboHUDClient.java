@@ -17,6 +17,7 @@ public class SchrumboHUDClient implements ClientModInitializer {
 	public static ConfigManager configManager;
 	public static HudConfig config;
 	private double initTime;
+
 	@Override
 	public void onInitializeClient() {
 		initTime = Util.getMeasuringTimeMs();
@@ -27,6 +28,7 @@ public class SchrumboHUDClient implements ClientModInitializer {
 
 		KeybindHandler.register();
 		InventoryRenderer.register();
+
 		initTime = Util.getMeasuringTimeMs() - initTime;
 		LOGGER.info("SchrumboHUD initialized in " + initTime + "ms");
 	}

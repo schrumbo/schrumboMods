@@ -57,7 +57,7 @@ public class HudConfig {
     }
 
     public float scale = 1.0f;
-    public float cornerRadius = 0.2f;
+    public boolean roundedCorners = true;
 
     public boolean backgroundEnabled = true;
     public float backgroundOpacity = 1.0f;
@@ -111,8 +111,6 @@ public class HudConfig {
         this.textShadowEnabled = true;
         this.textShadowOpacity = 1.0f;
         colors.text = 0xFFCDD6F4;
-
-        this.cornerRadius = 0.2f;
 
         this.slotBackgroundEnabled = true;
         this.slotBackgroundOpacity = 1.0f;

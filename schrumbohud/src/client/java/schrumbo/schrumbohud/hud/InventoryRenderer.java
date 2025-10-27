@@ -7,6 +7,7 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import schrumbo.schrumbohud.SchrumboHUDClient;
+import schrumbo.schrumbohud.Utils.RenderUtils;
 import schrumbo.schrumbohud.config.HudConfig;
 
 public class InventoryRenderer implements HudRenderCallback {
@@ -68,7 +69,7 @@ public class InventoryRenderer implements HudRenderCallback {
         return switch(config.anchor.horizontal){
             case LEFT -> offset;
             case RIGHT -> (screenWidth / 2) - (hudWidth / 2) + offset;
-            case CENTER -> screenWidth - hudWidth -offset;
+            case CENTER -> screenWidth - hudWidth - offset;
         };
     }
 
@@ -99,12 +100,22 @@ public class InventoryRenderer implements HudRenderCallback {
     private void drawBackground(DrawContext context, int width, int height, HudConfig config){
         if(config.backgroundEnabled){
             int backgroundColor = config.getColorWithAlpha(config.colors.background, config.backgroundOpacity);
-            context.fill(0, 0, width, height, backgroundColor);
+            if(config.roundedCorners){
+                RenderUtils.fillRoundedRect(context, 0, 0, width, height, 0.2f, backgroundColor);
+            }else{
+                context.fill(0, 0, width, height, backgroundColor);
+            }
+
         }
 
         if(config.outlineEnabled){
             int borderColor = config.getColorWithAlpha(config.colors.border, config.outlineOpacity);
-            context.drawBorder(0, 0, width, height, borderColor);
+            if(config.roundedCorners){
+                RenderUtils.drawRoundedRect(context, 0, 0, width, height, 0.2f, 1, borderColor);
+            }else{
+                context.drawBorder(0, 0, width, height, borderColor);
+            }
+
         }
     }
 
@@ -124,7 +135,11 @@ public class InventoryRenderer implements HudRenderCallback {
                 int slotY = PADDING + (row * SLOT_SIZE) + 1;
                 if(config.slotBackgroundEnabled){
                     int slotColor = config.getColorWithAlpha(config.colors.accent, config.slotBackgroundOpacity);
-                    context.fill(slotX, slotY, slotX + SLOT_SIZE - 2, slotY + SLOT_SIZE - 2, slotColor);
+                    if (config.roundedCorners){
+                        RenderUtils.drawRectWithCutCorners(context, slotX, slotY,SLOT_SIZE - 2, SLOT_SIZE - 2, 1, slotColor );
+                    }else{
+                        context.fill(slotX, slotY, slotX + SLOT_SIZE - 2, slotY + SLOT_SIZE - 2, slotColor);
+                    }
                 }
                 renderItem(context, stack, slotX, slotY, config);
             }
@@ -180,7 +195,7 @@ public class InventoryRenderer implements HudRenderCallback {
         int currDurability = maxDurability - stack.getDamage();
         float percentDurability = (float) currDurability / maxDurability;
 
-        int barWidth = SLOT_SIZE - 5;
+        int barWidth = SLOT_SIZE - 6;
         int filledWidth = (int) (barWidth * percentDurability);
         int barY = y + SLOT_SIZE - 4;
 
@@ -211,7 +226,6 @@ public class InventoryRenderer implements HudRenderCallback {
             return 0xFFFF0000;
         }
     }
-
 
 
 
