@@ -134,7 +134,7 @@ public class InventoryRenderer implements HudRenderCallback {
                 int slotX = PADDING + col * SLOT_SIZE + 1;
                 int slotY = PADDING + (row * SLOT_SIZE) + 1;
                 if(config.slotBackgroundEnabled){
-                    int slotColor = config.getColorWithAlpha(config.colors.accent, config.slotBackgroundOpacity);
+                    int slotColor = config.getColorWithAlpha(config.colors.slots, config.slotBackgroundOpacity);
                     if (config.roundedCorners){
                         RenderUtils.drawRectWithCutCorners(context, slotX, slotY,SLOT_SIZE - 2, SLOT_SIZE - 2, 1, slotColor );
                     }else{

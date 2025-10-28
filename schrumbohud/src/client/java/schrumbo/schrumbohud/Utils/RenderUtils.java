@@ -153,4 +153,24 @@ public class RenderUtils {
 
         context.fill(x + thickness, y + thickness, x + width - thickness, y + height - thickness, color);
     }
+
+    /**
+     * Fills a circle using pixel-based rendering
+     * @param context DrawContext for rendering
+     * @param centerX Center X coordinate
+     * @param centerY Center Y coordinate
+     * @param radius Radius of the circle
+     * @param color Color in ARGB format
+     */
+    public static void fillCircle(DrawContext context, int centerX, int centerY, int radius, int color) {
+        for (int dy = -radius; dy <= radius; dy++) {
+            for (int dx = -radius; dx <= radius; dx++) {
+                if (dx * dx + dy * dy <= radius * radius) {
+                    context.fill(centerX + dx, centerY + dy,
+                            centerX + dx + 1, centerY + dy + 1, color);
+                }
+            }
+        }
+    }
+
 }

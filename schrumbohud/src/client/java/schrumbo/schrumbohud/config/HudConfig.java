@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class HudConfig {
 
-
     public boolean enabled = true;
 
     @SerializedName("anchor")
@@ -15,7 +14,6 @@ public class HudConfig {
 
     @SerializedName("colors")
     public Colors colors = new Colors();
-
 
     public static class Anchor {
         @SerializedName("horizontal")
@@ -43,77 +41,143 @@ public class HudConfig {
     }
 
     public static class Colors {
+
         @SerializedName("background")
-        public int background = 0x1E1E2E;
+        public int background = 0x5955D9;
 
         @SerializedName("border")
-        public int border = 0x45475A;
+        public int border = 0x000000;
 
         @SerializedName("text")
-        public int text = 0xCDD6F4;
+        public int text = 0xFFFFFF;
 
         @SerializedName("accent")
-        public int accent = 0xCBA6F7;
+        public int accent = 0x927392;
+
+        @SerializedName("slots")
+        public int slots = 0x000000;
     }
+
 
     public float scale = 1.0f;
     public boolean roundedCorners = true;
-
     public boolean backgroundEnabled = true;
-    public float backgroundOpacity = 1.0f;
-
     public boolean outlineEnabled = true;
-    public float outlineOpacity = 1.0f;
-
     public boolean textShadowEnabled = true;
-    public float textShadowOpacity = 1.0f;
-
     public boolean slotBackgroundEnabled = true;
-    public float slotBackgroundOpacity = 1.0f;
 
-    /**
-     * Used to apply opacity to a color
-     * @param color a color wihtout opacity applied
-     * @param opacity wanted opacity
-     * @return color with opacity
-     */
+    public float backgroundOpacity = 0.14f;
+    public float outlineOpacity = 0.5f;
+    public float textShadowOpacity = 1.0f;
+    public float slotBackgroundOpacity = 0.3f;
+
+
     public int getColorWithAlpha(int color, float opacity){
         int alpha = (int) (opacity * 255);
         return (alpha << 24) | (color & 0x00FFFFFF);
     }
 
 
-    /**
-     * Toggle HUD visibility
-     */
+    public void loadClassicInventoryHUD() {
+        colors.background = 0x5955D9;
+        colors.border = 0x000000;
+        colors.text = 0xFFFFFF;
+        colors.slots = 0x000000;
+
+        backgroundOpacity = 0.14f;
+        outlineOpacity = 0.5f;
+        textShadowOpacity = 1.0f;
+        slotBackgroundOpacity = 0.3f;
+    }
+
+
+    public void loadCatppuccinMocha() {
+        colors.background = 0x1E1E2E;
+        colors.border = 0x89B4FA;
+        colors.text = 0xCDD6F4;
+        colors.slots = 0x313244;
+
+        backgroundOpacity = 0.95f;
+        outlineOpacity = 1.0f;
+        textShadowOpacity = 0.8f;
+        slotBackgroundOpacity = 0.7f;
+    }
+
+
+    public void loadGruvbox() {
+        colors.background = 0x282828;
+        colors.border = 0xFE8019;
+        colors.text = 0xEBDBB2;
+        colors.slots = 0x3C3836;
+
+        backgroundOpacity = 0.9f;
+        outlineOpacity = 1.0f;
+        textShadowOpacity = 0.9f;
+        slotBackgroundOpacity = 0.65f;
+    }
+
+
+    public void loadMonokai() {
+        colors.background = 0x272822;
+        colors.border = 0xF92672;
+        colors.text = 0xF8F8F2;
+        colors.slots = 0x49483E;
+
+        backgroundOpacity = 0.92f;
+        outlineOpacity = 1.0f;
+        textShadowOpacity = 0.85f;
+        slotBackgroundOpacity = 0.7f;
+    }
+
+
+    public void loadDracula() {
+        colors.background = 0x282A36;
+        colors.border = 0xBD93F9;
+        colors.text = 0xF8F8F2;
+        colors.slots = 0x44475A;
+
+        backgroundOpacity = 0.95f;
+        outlineOpacity = 1.0f;
+        textShadowOpacity = 0.9f;
+        slotBackgroundOpacity = 0.75f;
+    }
+
     public void toggle() {
         this.enabled = !this.enabled;
     }
 
-    /**
-     * Reset all values to defaults
-     */
     public void reset() {
         this.enabled = true;
-
         position.x = 10;
         position.y = 10;
         this.scale = 1.0f;
+        this.roundedCorners = true;
+
+        loadClassicInventoryHUD();
 
         this.backgroundEnabled = true;
-        this.backgroundOpacity = 1.0f;
-        colors.background = 0xFF1E1E2E;
-
         this.outlineEnabled = true;
-        this.outlineOpacity = 1.0f;
-        colors.border = 0xFF89B4FA;
-
         this.textShadowEnabled = true;
-        this.textShadowOpacity = 1.0f;
-        colors.text = 0xFFCDD6F4;
-
         this.slotBackgroundEnabled = true;
-        this.slotBackgroundOpacity = 1.0f;
-        colors.accent = 0xFF313244;
+    }
+
+    public void setBackgroundColor(int color) {
+        colors.background = color;
+    }
+
+    public void setBorderColor(int color) {
+        colors.border = color;
+    }
+
+    public void setTextColor(int color) {
+        colors.text = color;
+    }
+
+    public void setAccentColor(int color) {
+        colors.accent = color;
+    }
+
+    public void setSlotColor(int color){
+        colors.slots = color;
     }
 }
