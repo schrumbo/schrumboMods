@@ -111,7 +111,7 @@ public class InventoryRenderer implements HudRenderCallback {
         if(config.outlineEnabled){
             int borderColor = config.getColorWithAlpha(config.colors.border, config.outlineOpacity);
             if(config.roundedCorners){
-                RenderUtils.drawRoundedRect(context, 0, 0, width, height, 0.2f, 1, borderColor);
+                RenderUtils.drawRoundedRectWithOutline(context, 0, 0, width, height, 0.2f, 1, borderColor);
             }else{
                 context.drawBorder(0, 0, width, height, borderColor);
             }

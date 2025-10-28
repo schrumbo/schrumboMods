@@ -60,9 +60,11 @@ public class SliderWidget extends Widget {
     }
 
     private String formatValue(float value) {
-        if (max <= 1.0f && min >= 0.0f) {
-            return String.format("%.2f", value);
-        } else if (suffix.equals("x")) {
+        float range = max - min;
+
+        if (range <= 1.0f) {
+            return String.format("%.2f%s", value, suffix);
+        } else if (range <= 10.0f) {
             return String.format("%.1f%s", value, suffix);
         } else {
             return String.format("%.0f%s", value, suffix);
@@ -145,14 +147,16 @@ public class SliderWidget extends Widget {
     }
 
     private float roundValue(float value) {
-        if (max <= 1.0f && min >= 0.0f) {
+        float range = max - min;
+
+        if (range <= 1.0f) {
             return Math.round(value * 100) / 100.0f;
-        }
-
-        if (suffix.equals("x")) {
+        } else if (range <= 5.0f) {
             return Math.round(value * 10) / 10.0f;
+        } else if (range <= 20.0f) {
+            return Math.round(value * 2) / 2.0f;
+        } else {
+            return Math.round(value);
         }
-
-        return Math.round(value);
     }
 }

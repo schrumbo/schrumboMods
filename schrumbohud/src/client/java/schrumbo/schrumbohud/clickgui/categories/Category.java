@@ -49,7 +49,7 @@ public abstract class Category {
                 if (widget instanceof ColorPickerWidget) {
                     ColorPickerWidget picker = (ColorPickerWidget) widget;
                     if (picker.isPopupOpen()) {
-                        picker.renderPopup(context, mouseX, mouseY, delta);
+                        picker.renderPopupLayered(context, mouseX, mouseY, delta);
                     }
                 }
             }

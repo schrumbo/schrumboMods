@@ -36,7 +36,7 @@ public class RenderUtils {
     /**
      * Renders an outlined rounded rectangle
      */
-    public static void drawRoundedRect(DrawContext context, int x, int y, int width, int height, float radius, int thickness, int color) {
+    public static void drawRoundedRectWithOutline(DrawContext context, int x, int y, int width, int height, float radius, int thickness, int color) {
         if (radius <= 0) {
             context.drawBorder(x, y, width, height, color);
             return;

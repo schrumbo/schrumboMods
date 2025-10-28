@@ -33,7 +33,7 @@ public class ButtonWidget extends Widget {
 
         if (hovered) {
             int borderColor = config.getColorWithAlpha(config.colors.accent, 0.6f);
-            RenderUtils.drawRoundedRect(context, x, y, width, height, 0.0f, 1, borderColor);
+            RenderUtils.drawRoundedRectWithOutline(context, x, y, width, height, 0.0f, 1, borderColor);
         }
 
         var client = net.minecraft.client.MinecraftClient.getInstance();

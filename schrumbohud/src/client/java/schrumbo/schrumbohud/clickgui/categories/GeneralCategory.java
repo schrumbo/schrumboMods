@@ -34,7 +34,13 @@ public class GeneralCategory extends Category {
                 val -> config.roundedCorners = val
         ));
         currentY += widgets.get(widgets.size() - 1).getHeight() + WIDGET_SPACING;
-
+        widgets.add(new SliderWidget(
+                startX, currentY, width, "ClickGUI Scale",
+                0.75f, 1.25f, "",
+                () -> config.configScale,
+                val -> config.configScale = val
+        ));
+        currentY += widgets.get(widgets.size() - 1).getHeight() + WIDGET_SPACING;
         widgets.add(new ColorPickerWidget(
                 startX, currentY, width,
                 "ClickGUI Accent Color",

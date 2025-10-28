@@ -29,7 +29,7 @@ public class SlotCategory extends Category {
 
         widgets.add(new SliderWidget(
                 startX, currentY, width, "Opacity",
-                0.0f, 1.0f, "x",
+                0.0f, 1.0f, "",
                 () -> config.slotBackgroundOpacity,
                 val -> config.slotBackgroundOpacity = val
         ));

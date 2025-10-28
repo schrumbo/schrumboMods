@@ -14,6 +14,10 @@ import schrumbo.schrumbohud.config.ConfigManager;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main ClickGUI screen for configuration.
+ * Handles rendering input and category management
+ */
 public class ClickGuiScreen extends Screen {
     private int panelX = 50;
     private int panelY = 50;
@@ -29,8 +33,11 @@ public class ClickGuiScreen extends Screen {
     private int scrollOffset = 0;
     private int contentHeight = 0;
 
+    /**
+     * Initializes the ClickGUI with all configuration categories.
+     */
     public ClickGuiScreen() {
-        super(Text.literal("SchrumboHUD Settings"));
+        super(Text.literal("SchrumboHUD"));
 
         categories.add(new GeneralCategory());
         categories.add(new PresetsCategory());
@@ -50,6 +57,9 @@ public class ClickGuiScreen extends Screen {
         initializeCategories();
     }
 
+    /**
+     * Calculates and sets positions for all categories.
+     */
     private void initializeCategories() {
         int contentWidth = PANEL_WIDTH - 20;
         int currentY = 0;
@@ -72,34 +82,59 @@ public class ClickGuiScreen extends Screen {
 
         context.fillGradient(0, 0, this.width, this.height, 0x80000000, 0x80000000);
 
+        float scale = SchrumboHUDClient.config.configScale;
+        float scaledMouseX = (float) mouseX / scale;
+        float scaledMouseY = (float) mouseY / scale;
+
+        var matrices = context.getMatrices();
+
+        matrices.push();
+        matrices.scale(scale, scale, 1.0f);
         renderPanel(context);
+        renderScrollbar(context);
+        matrices.pop();
 
         int contentX = panelX + 10;
         int contentY = panelY + TITLE_BAR_HEIGHT + 10;
         int contentWidth = PANEL_WIDTH - 20;
         int contentAreaHeight = PANEL_HEIGHT - TITLE_BAR_HEIGHT - 20;
 
-        context.enableScissor(contentX, contentY, contentX + contentWidth, contentY + contentAreaHeight);
+        int scissorX = (int) (contentX * scale);
+        int scissorY = (int) (contentY * scale);
+        int scissorX2 = (int) ((contentX + contentWidth) * scale);
+        int scissorY2 = (int) ((contentY + contentAreaHeight) * scale);
+
+        context.enableScissor(scissorX, scissorY, scissorX2, scissorY2);
+
+        matrices.push();
+        matrices.scale(scale, scale, 1.0f);
 
         for (Category category : categories) {
-            category.render(context, mouseX, mouseY, delta);
+            category.render(context, (int) scaledMouseX, (int) scaledMouseY, delta);
         }
 
+        matrices.pop();
         context.disableScissor();
 
-        renderScrollbar(context);
+        matrices.push();
+        matrices.scale(scale, scale, 2.0f);
 
         for (Category category : categories) {
             if (!category.isCollapsed()) {
                 for (Widget widget : category.widgets) {
                     if (widget instanceof ColorPickerWidget colorPicker) {
-                        colorPicker.renderPopup(context, mouseX, mouseY, delta);
+                        colorPicker.renderPopupLayered(context, (int) scaledMouseX, (int) scaledMouseY, delta);
                     }
                 }
             }
         }
+
+        matrices.pop();
     }
 
+    /**
+     * Renders the main panel background and title bar.
+     */
     private void renderPanel(DrawContext context) {
         var config = SchrumboHUDClient.config;
 
@@ -107,17 +142,20 @@ public class ClickGuiScreen extends Screen {
         RenderUtils.fillRoundedRect(context, panelX, panelY, PANEL_WIDTH, PANEL_HEIGHT, 0.0f, bgColor);
 
         int outlineColor = config.getColorWithAlpha(config.colors.accent, 1.0f);
-        RenderUtils.drawRoundedRect(context, panelX, panelY, PANEL_WIDTH, PANEL_HEIGHT, 0.0f, 2, outlineColor);
+        RenderUtils.drawRoundedRectWithOutline(context, panelX, panelY, PANEL_WIDTH, PANEL_HEIGHT, 0.0f, 2, outlineColor);
 
         int titleBgColor = config.getColorWithAlpha(config.colors.accent, 0.3f);
         RenderUtils.fillRoundedRect(context, panelX, panelY, PANEL_WIDTH, TITLE_BAR_HEIGHT, 0.0f, titleBgColor);
 
-        String title = "SchrumboHUD Settings";
+        String title = "SchrumboHUD";
         int titleX = panelX + (PANEL_WIDTH - client.textRenderer.getWidth(title)) / 2;
         int titleY = panelY + (TITLE_BAR_HEIGHT - 8) / 2;
         context.drawText(client.textRenderer, Text.literal(title), titleX, titleY, 0xFFFFFF, true);
     }
 
+    /**
+     * Renders the scrollbar based on content height.
+     */
     private void renderScrollbar(DrawContext context) {
         var config = SchrumboHUDClient.config;
 
@@ -127,8 +165,7 @@ public class ClickGuiScreen extends Screen {
         int scrollbarHeight = PANEL_HEIGHT - TITLE_BAR_HEIGHT - 20;
 
         int trackColor = config.getColorWithAlpha(0x000000, 0.3f);
-        context.fill(scrollbarX, scrollbarY, scrollbarX + scrollbarWidth,
-                scrollbarY + scrollbarHeight, trackColor);
+        context.fill(scrollbarX, scrollbarY, scrollbarX + scrollbarWidth, scrollbarY + scrollbarHeight, trackColor);
 
         int maxScroll = Math.max(0, contentHeight - (PANEL_HEIGHT - TITLE_BAR_HEIGHT - 20));
         if (maxScroll > 0) {
@@ -145,19 +182,36 @@ public class ClickGuiScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button != 0) return super.mouseClicked(mouseX, mouseY, button);
 
+        float scale = SchrumboHUDClient.config.configScale;
+        double scaledMouseX = mouseX / scale;
+        double scaledMouseY = mouseY / scale;
+
         for (Category category : categories) {
-            if (category.mouseClicked(mouseX, mouseY, button)) {
-                initializeCategories();
-                return true;
+            if (!category.isCollapsed()) {
+                for (Widget widget : category.widgets) {
+                    if (widget instanceof ColorPickerWidget colorPicker) {
+                        if (colorPicker.isPopupOpen()) {
+                            boolean handled = colorPicker.mouseClicked(scaledMouseX, scaledMouseY, button);
+                            if (handled) return true;
+                        }
+                    }
+                }
             }
         }
 
-        if (mouseX >= panelX && mouseX <= panelX + PANEL_WIDTH &&
-                mouseY >= panelY && mouseY <= panelY + TITLE_BAR_HEIGHT) {
+        if (scaledMouseX >= panelX && scaledMouseX <= panelX + PANEL_WIDTH &&
+                scaledMouseY >= panelY && scaledMouseY <= panelY + TITLE_BAR_HEIGHT) {
             draggingPanel = true;
-            dragOffsetX = (int) (mouseX - panelX);
-            dragOffsetY = (int) (mouseY - panelY);
+            dragOffsetX = (int) (scaledMouseX - panelX);
+            dragOffsetY = (int) (scaledMouseY - panelY);
             return true;
+        }
+
+        for (Category category : categories) {
+            if (category.mouseClicked(scaledMouseX, scaledMouseY, button)) {
+                initializeCategories();
+                return true;
+            }
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -167,15 +221,34 @@ public class ClickGuiScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (button != 0) return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 
+        float scale = SchrumboHUDClient.config.configScale;
+        double scaledMouseX = mouseX / scale;
+        double scaledMouseY = mouseY / scale;
+        double scaledDeltaX = deltaX / scale;
+        double scaledDeltaY = deltaY / scale;
+
         for (Category category : categories) {
-            if (category.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+            if (!category.isCollapsed()) {
+                for (Widget widget : category.widgets) {
+                    if (widget instanceof ColorPickerWidget colorPicker) {
+                        if (colorPicker.isPopupOpen()) {
+                            boolean handled = colorPicker.mouseDragged(scaledMouseX, scaledMouseY, button, scaledDeltaX, scaledDeltaY);
+                            if (handled) return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Category category : categories) {
+            if (category.mouseDragged(scaledMouseX, scaledMouseY, button, scaledDeltaX, scaledDeltaY)) {
                 return true;
             }
         }
 
         if (draggingPanel) {
-            panelX = (int) (mouseX - dragOffsetX);
-            panelY = (int) (mouseY - dragOffsetY);
+            panelX = (int) (scaledMouseX - dragOffsetX);
+            panelY = (int) (scaledMouseY - dragOffsetY);
             initializeCategories();
             return true;
         }
@@ -187,14 +260,29 @@ public class ClickGuiScreen extends Screen {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button != 0) return super.mouseReleased(mouseX, mouseY, button);
 
-        // Check categories first
+        float scale = SchrumboHUDClient.config.configScale;
+        double scaledMouseX = mouseX / scale;
+        double scaledMouseY = mouseY / scale;
+
         for (Category category : categories) {
-            if (category.mouseReleased(mouseX, mouseY, button)) {
+            if (!category.isCollapsed()) {
+                for (Widget widget : category.widgets) {
+                    if (widget instanceof ColorPickerWidget colorPicker) {
+                        if (colorPicker.isPopupOpen()) {
+                            boolean handled = colorPicker.mouseReleased(scaledMouseX, scaledMouseY, button);
+                            if (handled) return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Category category : categories) {
+            if (category.mouseReleased(scaledMouseX, scaledMouseY, button)) {
                 return true;
             }
         }
 
-        // Release panel dragging
         if (draggingPanel) {
             draggingPanel = false;
             return true;
@@ -205,8 +293,12 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (mouseX >= panelX && mouseX <= panelX + PANEL_WIDTH &&
-                mouseY >= panelY + TITLE_BAR_HEIGHT && mouseY <= panelY + PANEL_HEIGHT) {
+        float scale = SchrumboHUDClient.config.configScale;
+        double scaledMouseX = mouseX / scale;
+        double scaledMouseY = mouseY / scale;
+
+        if (scaledMouseX >= panelX && scaledMouseX <= panelX + PANEL_WIDTH &&
+                scaledMouseY >= panelY + TITLE_BAR_HEIGHT && scaledMouseY <= panelY + PANEL_HEIGHT) {
 
             int maxScroll = Math.max(0, contentHeight - (PANEL_HEIGHT - TITLE_BAR_HEIGHT - 20));
             scrollOffset = Math.max(0, Math.min(maxScroll,
@@ -227,6 +319,19 @@ public class ClickGuiScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            for (Category category : categories) {
+                if (!category.isCollapsed()) {
+                    for (Widget widget : category.widgets) {
+                        if (widget instanceof ColorPickerWidget colorPicker) {
+                            if (colorPicker.isPopupOpen()) {
+                                colorPicker.closePopup();
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
             ConfigManager.save();
             this.close();
             return true;

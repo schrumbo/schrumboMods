@@ -29,7 +29,7 @@ public class OutlineCategory extends Category {
 
         widgets.add(new SliderWidget(
                 startX, currentY, width, "Opacity",
-                0.0f, 1.0f, "x",
+                0.0f, 1.0f, "",
                 () -> config.outlineOpacity,
                 val -> config.outlineOpacity= val
         ));
