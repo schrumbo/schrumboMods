@@ -12,7 +12,7 @@
 		"sources": "https://github.com/schrumbo/schrumboMods"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/schrumbohud/icon.png",
+	"icon": "assets/schrumbohud/HUD.png",
 	"environment": "*",
 	"entrypoints": {
 		"client": [
