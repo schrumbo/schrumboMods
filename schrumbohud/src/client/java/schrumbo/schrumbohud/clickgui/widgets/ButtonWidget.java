@@ -61,9 +61,7 @@ public class ButtonWidget extends Widget {
 
             try {
                 onClick.run();
-                System.out.println("✅ ButtonWidget clicked: " + label);
             } catch (Exception e) {
-                System.err.println("❌ ButtonWidget error: " + e.getMessage());
                 e.printStackTrace();
             }
 
