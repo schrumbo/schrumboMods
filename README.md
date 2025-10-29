@@ -1,3 +1,4 @@
+# THIS REPOSITY IS ARCHIVED, VISIT github.com/schrumbo/schrumboHUD
 # SchrumboHUD
 SchrumboHUD is a highly customizable Minecraft mod for Fabric 1.21.5 that permanently displays the player’s inventory on the screen.
 
